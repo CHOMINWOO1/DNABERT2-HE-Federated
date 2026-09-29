@@ -1,16 +1,15 @@
 # DNABERT2-HE-Federated
 
-**유전체 언어모델의 연합학습·암호화 집계와 학습된 가중치의 정보 노출을 분석하는 연구**
+**유전체 언어모델의 연합학습과 CKKS 동형암호 집계를 비교하는 연구**
 
-> Federated adaptation, encrypted update aggregation, and controlled memorization experiments for a genomic language model.
+> Federated adaptation and homomorphically encrypted update aggregation for genomic language models.
 
-이 프로젝트는 유전체 모델의 개인정보 보호를 두 단계로 나누어 다룬다. 첫 번째는 여러 참여자의 학습 update를 집계할 때 노출되는 정보를 줄이는 문제다. 두 번째는 학습 이후 공개되는 모델 가중치가 입력 서열의 일부를 암기하고 복구 가능한 형태로 남기는 문제다. 두 실험군을 함께 두되, 서로 다른 위협 모델과 검증 기준을 적용한다.
+이 프로젝트는 여러 참여자의 유전체 모델 update를 평문 또는 CKKS 동형암호로 집계할 때의 예측 성능·수치 오차·통신 및 계산 비용을 비교한다. 최종 가중치의 학습정보 복구 연구는 [별도 프로젝트](https://github.com/CHOMINWOO1/DNABERT2-Genomic-Data-Recovery)로 분리했다.
 
 | 항목 | 내용 |
 |---|---|
 | 기반 모델 | DNABERT-2 |
 | 학습 비교 | Local/Centralized, FedAvg, FedProx, CKKS 집계; LoRA와 Full-FT |
-| 개인정보 연구 | 합성 DNA canary를 이용한 통제된 암기·복구 실험 |
 | 주요 기술 | Python, PyTorch, Transformers, PEFT, TenSEAL, OpenFHE 인터페이스 |
 | 공개 범위 | 핵심 runner, 암호 집계 코드, 경량 테스트, 프로토콜과 선별 결과 |
 
@@ -19,8 +18,6 @@
 - 같은 update를 집계할 때 CKKS 근사 연산이 예측 성능과 수치 오차에 어떤 영향을 주는가?
 - LoRA와 Full-FT는 학습 성능 외에 통신량·직렬화 크기·집계 비용에서 어떻게 다른가?
 - 기관별 label 분포가 다를 때 pooled 성능과 기관별 성능을 어떻게 구분해 평가해야 하는가?
-- Update를 암호화하는 것과 최종 가중치에서 정보를 복구하지 못하게 하는 것은 어떤 점에서 다른가?
-- 학습 횟수·제공 문맥·대조군을 통제했을 때 합성 비밀 서열이 얼마나 복구되는가?
 
 ## 2. 연합학습·암호화 집계 구조
 
@@ -69,20 +66,9 @@ Primary 비교는 non-IID pooled-test AUPRC의 paired difference다. AUROC·MCC�
 
 기록된 Full-FT 추가 실험은 TenSEAL CKKS의 polynomial modulus degree **8192**, coefficient modulus bits **[60, 40, 60]**, scale **2^40**, ciphertext당 **4,096 slots**를 사용한다. 직렬화 크기는 logical traffic이며 실제 WAN 전송 측정과 다르다. 이후 OpenFHE/threshold 관련 코드는 별도 경로로 포함되어 있다. 과거 TenSEAL 결과를 threshold 보안 검증 결과로 바꾸어 설명하지 않는다.
 
-## 4. 합성 DNA 암기·복구 실험
+## 4. 기록된 연합학습 결과
 
-이 실험은 알려진 문맥 안에 합성 비밀을 삽입하고, 학습 노출 조건과 모델 대조군을 설정한다. 학습된 비밀의 복구와 사전학습 모델이 원래 가진 예측 능력을 구분하는 것이 목적이다.
-
-| 항목 | 기록된 조건 또는 결과 |
-|---|---|
-| 반복과 모델 | **5 seeds, 13 models** |
-| 입력 구성 | **1,280 contexts, 2,560 synthetic canaries** |
-| 대표 복구 조건 | **84 bp** 문맥과 숨긴 **3-token** 길이를 제공; 학습된 **12 bp** 비밀 |
-| 320회 노출 조건 | **616/640 (96.25%)** exact recovery |
-| 사전학습 모델 대조 | **0/640** |
-| 같은 문맥의 미학습 비밀 대조 | **0/640** |
-
-이 결과는 해당 조건의 합성 비밀 복구를 보여준다. 실제 환자 유전체 유출, 무문맥 전체 서열 복원, 모든 학습 데이터의 복구 가능성을 입증하는 결과로 확대하지 않는다. [프로토콜](experiments/privacy_memorization_scale_20260928/protocol_KO.md), [결과와 해석](experiments/privacy_memorization_scale_20260928/results_KO.md), [표](experiments/privacy_memorization_scale_20260928/paper_tables.md)
+[보강 수렴 민감도 분석](docs/earlystop_results/RESULTS.md)에 5개 seed의 Plain/HE pooled-test AUPRC, paired difference, 집계 원자료와 출처 hash를 수록했다. 고정 5-round 주 분석과 별도인 early-stopping 분석이며, 평균·SD만으로 비열등성 충족을 확정하지 않는다.
 
 ## 5. 코드 구조
 
@@ -92,7 +78,6 @@ Primary 비교는 non-IID pooled-test AUPRC의 paired difference다. AUROC·MCC�
 | [run_fedhe_main_experiment.py](scripts/run_fedhe_main_experiment.py) | Full-data 비교, 비용 기록, streaming state 집계 |
 | [run_fedhe_earlystop_v3.py](scripts/run_fedhe_earlystop_v3.py) | 학습 진행과 checkpoint 선택 관련 runner |
 | [openfhe_threshold_ckks.py](scripts/openfhe_threshold_ckks.py) | Threshold-CKKS 인터페이스 |
-| [privacy_memorization_scale_20260928/](experiments/privacy_memorization_scale_20260928/) | 데이터 준비·학습·공격·분석·검증 코드 |
 | [tests/](tests/) | Streaming 집계, runner, 암호 인터페이스 검사 |
 
 ## 6. 실행 수준별 시작 방법
@@ -112,13 +97,19 @@ python -m pytest tests/test_openfhe_threshold_ckks.py -q
 
 이 명령은 실제 OpenFHE 암호 연산 벤치마크를 실행하지 않는다. 전체 모델 학습에는 GUE 데이터, DNABERT-2 가중치, GPU 및 해당 HE backend가 필요하다. [requirements.txt](requirements.txt)는 원래 Windows/CUDA 환경의 기록이며 CPU나 다른 운영체제에 그대로 적용하는 범용 설치법은 아니다.
 
-복구 실험은 [REPRODUCE.md](experiments/privacy_memorization_scale_20260928/REPRODUCE.md)의 단계 순서를 따른다. 공개본에서는 원시 GUE 데이터, 모델 가중치, checkpoint 및 per-example 복구 export를 제외했으므로 필요한 입력과 산출물을 먼저 생성해야 한다.
 
 ## 7. 검증과 해석 범위
 
 공개본에서는 경량 threshold-interface 테스트 **3개가 통과**했다. Full GPU training, 실제 TenSEAL/OpenFHE 집계, 전체 runner 테스트를 이번 공개 과정에서 다시 실행한 것은 아니다.
 
 연합학습 집계 보호와 최종 가중치의 정보 노출은 별개의 문제다. 암호 집계 구현만으로 학습·추론 전체의 암호화, 실제 기관 간 key isolation, 최종 모델에 대한 개인정보 보호를 보장하지 않는다. 이 저장소의 가치는 각 경계에 맞는 비교군·측정 항목·대조 실험을 구분해 구현한 데 있다.
+
+
+## 시각화된 결과와 진행 상태
+
+![실험 및 검증 결과](docs/portfolio-results/results.png)
+
+[상세 결과·진행 상태·보완 과제·보안 범위](docs/portfolio-results/README.md)에서 근거 자료와 재현 코드를 확인할 수 있다.
 
 ## 공개 범위와 추가 문서
 

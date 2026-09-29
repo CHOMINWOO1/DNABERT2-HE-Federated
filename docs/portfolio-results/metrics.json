@@ -1,0 +1,61 @@
+{
+  "title": "DNABERT2-HE-Federated | Encrypted aggregation",
+  "subtitle": "Historical H3K4me3 early-stopping sensitivity analysis; paired seeds 42\u201346, non-IID three-silo split.",
+  "panels": [
+    {
+      "title": "Pooled test AUPRC \u00b7 mean \u00b1 sample SD",
+      "labels": [
+        "Plain FedAvg LoRA",
+        "CKKS HE-FedAvg LoRA"
+      ],
+      "values": [
+        0.7681965863902785,
+        0.7675244377895201
+      ],
+      "error": [
+        0.004935925434270036,
+        0.003443909800112012
+      ],
+      "xlabel": "AUPRC",
+      "xlim": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Paired HE minus Plain",
+      "kind": "interval",
+      "labels": [
+        "Seed 42",
+        "Seed 43",
+        "Seed 44",
+        "Seed 45",
+        "Seed 46"
+      ],
+      "values": [
+        -0.00626380800429982,
+        -0.0008435180441542789,
+        0.00047370650213118815,
+        0.003436776580123535,
+        -0.00016390003759270133
+      ],
+      "low": [
+        -0.00626380800429982,
+        -0.0008435180441542789,
+        0.00047370650213118815,
+        0.003436776580123535,
+        -0.00016390003759270133
+      ],
+      "high": [
+        -0.00626380800429982,
+        -0.0008435180441542789,
+        0.00047370650213118815,
+        0.003436776580123535,
+        -0.00016390003759270133
+      ],
+      "xlabel": "AUPRC difference"
+    }
+  ],
+  "boundary": "Supplemental convergence sensitivity study; it does not replace the fixed-budget main analysis.\nUtility similarity is not a proof of privacy or key isolation. No new training was performed.",
+  "source": "docs/earlystop_results/summary.json"
+}

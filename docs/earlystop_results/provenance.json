@@ -1,0 +1,72 @@
+[
+  {
+    "file": "seed_42_fedavg.csv",
+    "seed": 42,
+    "method": "fedavg",
+    "original_sha256": "a09498f3dfbe62af8aa8ee35f9a83a5a3eb6942438d0e0846d75af11ce78daa8",
+    "completion_manifest_hash_matched": true
+  },
+  {
+    "file": "seed_42_he_fedavg.csv",
+    "seed": 42,
+    "method": "he_fedavg",
+    "original_sha256": "c0e3bc5b0944d2688ef8dcf549b9db724bc4f9a689a2bd52f034270f282adc06",
+    "completion_manifest_hash_matched": true
+  },
+  {
+    "file": "seed_43_fedavg.csv",
+    "seed": 43,
+    "method": "fedavg",
+    "original_sha256": "c8190dc85cb75e54f7367f723c4d80f1dd0569d155cf14db7ccb5d129007f194",
+    "completion_manifest_hash_matched": true
+  },
+  {
+    "file": "seed_43_he_fedavg.csv",
+    "seed": 43,
+    "method": "he_fedavg",
+    "original_sha256": "9df0a482885ffb555660ce78f46b6bf1e3ee46a32be7d8c5be4365fe907ee5e8",
+    "completion_manifest_hash_matched": true
+  },
+  {
+    "file": "seed_44_fedavg.csv",
+    "seed": 44,
+    "method": "fedavg",
+    "original_sha256": "bb9dc6750bb575dfbaad6fb985bb15ea1b24e637726bdecce1054515d08fb1ee",
+    "completion_manifest_hash_matched": true
+  },
+  {
+    "file": "seed_44_he_fedavg.csv",
+    "seed": 44,
+    "method": "he_fedavg",
+    "original_sha256": "afdd0718901674bb4c9e21fbcdc0dbd8046b414fa74f0c04d9667fbefa4f19f4",
+    "completion_manifest_hash_matched": true
+  },
+  {
+    "file": "seed_45_fedavg.csv",
+    "seed": 45,
+    "method": "fedavg",
+    "original_sha256": "ece235e25f96a9ead9a3532487d7a4dfd55138f05c5685704c13232b665f1941",
+    "completion_manifest_hash_matched": true
+  },
+  {
+    "file": "seed_45_he_fedavg.csv",
+    "seed": 45,
+    "method": "he_fedavg",
+    "original_sha256": "b24db82b62a1c33826a7695f948e687e7048e4c32c45cfec6d95acb9a360e710",
+    "completion_manifest_hash_matched": true
+  },
+  {
+    "file": "seed_46_fedavg.csv",
+    "seed": 46,
+    "method": "fedavg",
+    "original_sha256": "28bcc97a57d0fc631f83e6856cf7cebc745bacecbf5b444334205941d376fd8b",
+    "completion_manifest_hash_matched": true
+  },
+  {
+    "file": "seed_46_he_fedavg.csv",
+    "seed": 46,
+    "method": "he_fedavg",
+    "original_sha256": "4b403976b513549519b812fdce7e136c2950e06bb8f117bed3f102acc4b23bbb",
+    "completion_manifest_hash_matched": true
+  }
+]
